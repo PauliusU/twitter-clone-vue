@@ -24,38 +24,35 @@
 </template>
 
 <script>
-    import {reactive} from 'vue';
-    import TweetItem from "./TweetItem";
-    import CreateTweetPanel from "./CreateTweetPanel";
+    import {reactive, computed} from 'vue';
+    import {useRoute} from 'vue-router';
+    import {users} from "../assets/users";
+    import TweetItem from "../components/TweetItem";
+    import CreateTweetPanel from "../components/CreateTweetPanel";
 
     export default {
         name: "UserProfile",
         components: {CreateTweetPanel, TweetItem},
         setup() {
+            const route = useRoute();
+
+            // get userId from URL
+            const userId = computed(() => route.params.userId);
+
+
             const state = reactive({
                 followers: 0,
-                user: {
-                    id: 1,
-                    username: "JohnSmith1358",
-                    firstName: "John",
-                    lastName: "Smith",
-                    email: "john@smith.com",
-                    isAdmin: true,
-                    tweets: [
-                        {id: 1, content: "Twitter is Amazing!"},
-                        {id: 2, content: "Don't forget to subscribe to @JohnSmith1358"},
-                    ]
-                }
+                user: users[userId.value - 1] || users[0],
             });
 
             function addTweet(tweet) {
                 state.user.tweets.unshift({id: state.user.tweets.length + 1, content: tweet});
             }
 
-
             return {
                 state,
-                addTweet
+                addTweet,
+                userId
             }
         }
     };
@@ -82,8 +79,8 @@
             }
 
             .user-profile__admin-badge {
-                background: rebeccapurple;
-                color: white;
+                color: deeppink;
+                border: 1px solid deeppink;
                 border-radius: 5px;
                 margin-right: auto;
                 padding: 0 10px;

@@ -2,7 +2,7 @@
     <form class="create-tweet-panel" @submit.prevent="createNewTweet"
           :class="{ '--exceeded': newTweetCharacterCount > 180 }">
         <label for="newTweet"><strong>New Tweet</strong> ({{ newTweetCharacterCount }}/180)</label>
-        <textarea id="newTweet" rows="4" v-model="state.newTweetContent"/>
+        <textarea id="newTweet" rows="5" v-model="state.newTweetContent"/>
 
         <div class="create-tweet-panel__submit">
             <div class="create-tweet-type">
@@ -67,6 +67,7 @@
         textarea {
             border: 1px solid #DFE3E8;
             border-radius: 5px;
+            resize: none;
         }
 
         .create-tweet-panel__submit {
@@ -82,7 +83,7 @@
                 margin: auto 0;
                 border-radius: 5px;
                 border: none;
-                background-color: deeppink;
+                background-color: #1da1f2;
                 color: white;
                 font-weight: bold;
             }

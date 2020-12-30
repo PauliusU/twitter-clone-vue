@@ -1,28 +1,33 @@
 <template>
     <div id="app">
         <nav>
-            <div class="navigation__logo">
-                Twitter
-            </div>
+            <router-link to="/">
+                <div class="navigation__logo">
+                    Twitter
+                </div>
+            </router-link>
             <div class="navigation__user">
-                {{ user.username }}
+                {{ state.user.username }}
             </div>
         </nav>
-        <UserProfile/>
+        <router-view/>
     </div>
 </template>
 
 <script>
-    import UserProfile from "./components/UserProfile";
+    import {reactive} from 'vue';
 
     export default {
         name: 'App',
-        components: {UserProfile},
-        data() {
-            return {
+        setup() {
+            const state = reactive({
                 user: {
                     username: "JohnSmith1358"
                 }
+            });
+
+            return {
+                state
             }
         }
     }
@@ -43,7 +48,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 10px 5%;
-        background-color: deeppink;
+        background-color: #1da1f2;
         color: white;
 
         .navigation__logo {
