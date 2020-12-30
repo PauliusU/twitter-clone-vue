@@ -1,30 +1,16 @@
 <template>
     <div class="user-profile">
-        <div class="user-profile__user-panel">
-            <h1 class="user-profile__username">@{{user.username}}</h1>
-            <div class="user-profile__admin-badge" v-if="user.isAdmin">
-                Admin
-            </div>
-            <div class="user-profile__follower-count">
-                <strong>Followers: </strong> {{followers}}
-            </div>
-            <form class="user-profile__create-tweet" @submit.prevent="createNewTweet" :class="{'--exceeded': newTweetCharacterCount > 180}">
-                <label for="newTweet"><strong>New Tweet</strong> ({{newTweetCharacterCount}}/180) </label>
-                <textarea name="" id="newTweet" rows="4" v-model="newTweetContent"/>
-
-                <div class="user-profile__create-tweet-type">
-                    <label for="newTweetType"><strong>Type:</strong></label>
-                    <select id="newTweetType" v-model="selectedTweetType">
-                        <option :value="option.value" v-for="(option, index) in tweetTypes" :key="index">
-                            {{option.name}}
-                        </option>
-                    </select>
+        <div class="user-profile__sidebar">
+            <div class="user-profile__user-panel">
+                <h1 class="user-profile__username">@{{ user.username }}</h1>
+                <div class="user-profile__admin-badge" v-if="user.isAdmin">
+                    Admin
                 </div>
-
-                <button>
-                    Tweet!
-                </button>
-            </form>
+                <div class="user-profile__follower-count">
+                    <strong>Followers: </strong> {{ followers }}
+                </div>
+            </div>
+            <CreateTweetPanel @add-tweet="addTweet"/>
         </div>
         <div class="user-profile__tweets-wrapper">
             <TweetItem
@@ -32,7 +18,6 @@
                     :key="tweet.id"
                     :username="user.username"
                     :tweet="tweet"
-                    @favourite="toggleFavourite"
             />
         </div>
     </div>
@@ -40,18 +25,13 @@
 
 <script>
     import TweetItem from "./TweetItem";
+    import CreateTweetPanel from "./CreateTweetPanel";
 
     export default {
-        name: 'UserProfile',
-        components: {TweetItem},
+        name: "UserProfile",
+        components: {CreateTweetPanel, TweetItem},
         data() {
             return {
-                newTweetContent: "",
-                selectedTweetType: "instant",
-                tweetTypes: [
-                    {value: 'draft', name: "Draft"},
-                    {value: 'instant', name: "Instant Tweet"},
-                ],
                 followers: 0,
                 user: {
                     id: 1,
@@ -67,59 +47,29 @@
                 }
             }
         },
-        watch: {
-            followers(newFollowerCount, oldFollowerCount) {
-                if (oldFollowerCount < newFollowerCount) {
-                    console.log(`${this.user.username} has gained a follower`);
-                }
-            }
-        },
-        computed: {
-            newTweetCharacterCount() {
-                return this.newTweetContent.length;
-            }
-        },
         methods: {
-            followUser() {
-                this.followers++;
-            },
-            toggleFavourite(id) {
-                console.log(`Favourited Tweet #${id}`);
-            },
-            createNewTweet() {
-                if (this.newTweetContent && this.selectedTweetType !== "draft" && this.newTweetCharacterCount <= 180) {
-                    // add new tweet to start of the tweets list
-                    this.user.tweets.unshift({
-                        id: this.user.tweets.length + 1,
-                        content: this.newTweetContent
-                    })
-                    // empty textarea
-                    this.newTweetContent = "";
-                }
+            addTweet(tweet) {
+                this.user.tweets.unshift({id: this.user.tweets.length + 1, content: tweet });
             }
-        },
-        mounted() {
-            this.followUser();
-        },
-    }
+        }
+    };
 </script>
 
-// 'scoped' attribute applies CSS only to current component
 <style lang="scss" scoped>
     .user-profile {
         display: grid;
         grid-template-columns: 1fr 3fr;
-        width: 100%;
+        grid-gap: 50px;
         padding: 50px 5%;
 
         .user-profile__user-panel {
             display: flex;
             flex-direction: column;
-            margin-right: 50px;
             padding: 20px;
             background-color: white;
             border-radius: 5px;
             border: 1px solid #DFE3E8;
+            margin-bottom: auto;
 
             h1 {
                 margin: 0;
@@ -132,24 +82,6 @@
                 margin-right: auto;
                 padding: 0 10px;
                 font-weight: bold;
-                margin-bottom: 20px;
-            }
-
-            .user-profile__create-tweet {
-                padding-top: 20px;
-                display: flex;
-                flex-direction: column;
-
-                &.--exceeded {
-                    color: red;
-                    border-color: red;
-
-                    button {
-                        background-color: red;
-                        border: none;
-                        color: white;
-                    }
-                }
             }
         }
 
