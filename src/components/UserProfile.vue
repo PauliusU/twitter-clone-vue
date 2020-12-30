@@ -8,8 +8,8 @@
             <div class="user-profile__follower-count">
                 <strong>Followers: </strong> {{followers}}
             </div>
-            <form action="" class="user-profile__create-tweet" @submit.prevent="createNewTweet">
-                <label for="newTweet"><strong>New Tweet</strong></label>
+            <form class="user-profile__create-tweet" @submit.prevent="createNewTweet" :class="{'--exceeded': newTweetCharacterCount > 180}">
+                <label for="newTweet"><strong>New Tweet</strong> ({{newTweetCharacterCount}}/180) </label>
                 <textarea name="" id="newTweet" rows="4" v-model="newTweetContent"/>
 
                 <div class="user-profile__create-tweet-type">
@@ -75,8 +75,8 @@
             }
         },
         computed: {
-            fullName() {
-                return `${this.user.firstName} ${this.user.lastName}`
+            newTweetCharacterCount() {
+                return this.newTweetContent.length;
             }
         },
         methods: {
@@ -87,7 +87,7 @@
                 console.log(`Favourited Tweet #${id}`);
             },
             createNewTweet() {
-                if (this.newTweetContent && this.selectedTweetType !== "draft") {
+                if (this.newTweetContent && this.selectedTweetType !== "draft" && this.newTweetCharacterCount <= 180) {
                     // add new tweet to start of the tweets list
                     this.user.tweets.unshift({
                         id: this.user.tweets.length + 1,
@@ -104,48 +104,59 @@
     }
 </script>
 
-<style>
+// 'scoped' attribute applies CSS only to current component
+<style lang="scss" scoped>
     .user-profile {
         display: grid;
         grid-template-columns: 1fr 3fr;
         width: 100%;
         padding: 50px 5%;
-    }
 
-    .user-profile__user-panel {
-        display: flex;
-        flex-direction: column;
-        margin-right: 50px;
-        padding: 20px;
-        background-color: white;
-        border-radius: 5px;
-        border: 1px solid #DFE3E8;
-    }
+        .user-profile__user-panel {
+            display: flex;
+            flex-direction: column;
+            margin-right: 50px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #DFE3E8;
 
-    .user-profile__admin-badge {
-        background: rebeccapurple;
-        color: white;
-        border-radius: 5px;
-        margin-right: auto;
-        padding: 0 10px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+            h1 {
+                margin: 0;
+            }
 
-    h1 {
-        margin: 0;
-    }
+            .user-profile__admin-badge {
+                background: rebeccapurple;
+                color: white;
+                border-radius: 5px;
+                margin-right: auto;
+                padding: 0 10px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
 
-    .user-profile__tweets-wrapper {
-        display: grid;
-        grid-gap: 10px;
-        margin-bottom: auto;
-    }
+            .user-profile__create-tweet {
+                padding-top: 20px;
+                display: flex;
+                flex-direction: column;
 
-    .user-profile__create-tweet {
-        padding-top: 20px;
-        display: flex;
-        flex-direction: column;
+                &.--exceeded {
+                    color: red;
+                    border-color: red;
 
+                    button {
+                        background-color: red;
+                        border: none;
+                        color: white;
+                    }
+                }
+            }
+        }
+
+        .user-profile__tweets-wrapper {
+            display: grid;
+            grid-gap: 10px;
+            margin-bottom: auto;
+        }
     }
 </style>
