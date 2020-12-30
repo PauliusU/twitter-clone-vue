@@ -86,6 +86,7 @@
                 background-color: #1da1f2;
                 color: white;
                 font-weight: bold;
+                cursor: pointer;
             }
         }
 

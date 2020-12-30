@@ -7,7 +7,7 @@
                     Admin
                 </div>
                 <div class="user-profile__follower-count">
-                    <strong>Followers: </strong> {{ state.followers }}
+                    <strong>Followers: </strong> {{ state.user.followers }}
                 </div>
             </div>
             <CreateTweetPanel @add-tweet="addTweet"/>
@@ -18,6 +18,11 @@
                     :key="tweet.id"
                     :username="state.user.username"
                     :tweet="tweet"
+            />
+            <TweetItem
+                    v-if="state.user.tweets.length === 0"
+                    :username="state.user.username + ' has no tweets'"
+                    tweet='{}'
             />
         </div>
     </div>
@@ -39,9 +44,7 @@
             // get userId from URL
             const userId = computed(() => route.params.userId);
 
-
             const state = reactive({
-                followers: 0,
                 user: users[userId.value - 1] || users[0],
             });
 

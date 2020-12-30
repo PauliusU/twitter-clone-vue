@@ -5,6 +5,7 @@ export const users = [
         "firstName": "John",
         "lastName": "Smith",
         "email": "John@Smith.com",
+        "followers": 3601,
         "isAdmin": true,
         "tweets": [
             {
@@ -23,8 +24,14 @@ export const users = [
         "firstName": "Ashley",
         "lastName": "Cole",
         "email": null,
+        "followers": 129,
         "isAdmin": false,
-        "tweets": []
+        "tweets": [
+            {
+                "id": 1,
+                "content": "Stop the count!"
+            },
+        ]
     },
     {
         "id": 3,
@@ -32,6 +39,7 @@ export const users = [
         "firstName": "Curtis",
         "lastName": "Jones",
         "email": null,
+        "followers": 0,
         "isAdmin": false,
         "tweets": []
     },
@@ -41,6 +49,7 @@ export const users = [
         "firstName": "Robert",
         "lastName": "Williams",
         "email": null,
+        "followers": 1568,
         "isAdmin": false,
         "tweets": [
             {
