@@ -8,6 +8,23 @@
             <div class="user-profile__follower-count">
                 <strong>Followers: </strong> {{followers}}
             </div>
+            <form action="" class="user-profile__create-tweet" @submit.prevent="createNewTweet">
+                <label for="newTweet"><strong>New Tweet</strong></label>
+                <textarea name="" id="newTweet" rows="4" v-model="newTweetContent"/>
+
+                <div class="user-profile__create-tweet-type">
+                    <label for="newTweetType"><strong>Type:</strong></label>
+                    <select id="newTweetType" v-model="selectedTweetType">
+                        <option :value="option.value" v-for="(option, index) in tweetTypes" :key="index">
+                            {{option.name}}
+                        </option>
+                    </select>
+                </div>
+
+                <button>
+                    Tweet!
+                </button>
+            </form>
         </div>
         <div class="user-profile__tweets-wrapper">
             <TweetItem
@@ -29,6 +46,12 @@
         components: {TweetItem},
         data() {
             return {
+                newTweetContent: "",
+                selectedTweetType: "instant",
+                tweetTypes: [
+                    {value: 'draft', name: "Draft"},
+                    {value: 'instant', name: "Instant Tweet"},
+                ],
                 followers: 0,
                 user: {
                     id: 1,
@@ -62,6 +85,17 @@
             },
             toggleFavourite(id) {
                 console.log(`Favourited Tweet #${id}`);
+            },
+            createNewTweet() {
+                if (this.newTweetContent && this.selectedTweetType !== "draft") {
+                    // add new tweet to start of the tweets list
+                    this.user.tweets.unshift({
+                        id: this.user.tweets.length + 1,
+                        content: this.newTweetContent
+                    })
+                    // empty textarea
+                    this.newTweetContent = "";
+                }
             }
         },
         mounted() {
@@ -95,6 +129,7 @@
         margin-right: auto;
         padding: 0 10px;
         font-weight: bold;
+        margin-bottom: 20px;
     }
 
     h1 {
@@ -105,5 +140,12 @@
         display: grid;
         grid-gap: 10px;
         margin-bottom: auto;
+    }
+
+    .user-profile__create-tweet {
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column;
+
     }
 </style>
