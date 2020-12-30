@@ -2,21 +2,21 @@
     <div class="user-profile">
         <div class="user-profile__sidebar">
             <div class="user-profile__user-panel">
-                <h1 class="user-profile__username">@{{ user.username }}</h1>
-                <div class="user-profile__admin-badge" v-if="user.isAdmin">
+                <h1 class="user-profile__username">@{{ state.user.username }}</h1>
+                <div class="user-profile__admin-badge" v-if="state.user.isAdmin">
                     Admin
                 </div>
                 <div class="user-profile__follower-count">
-                    <strong>Followers: </strong> {{ followers }}
+                    <strong>Followers: </strong> {{ state.followers }}
                 </div>
             </div>
             <CreateTweetPanel @add-tweet="addTweet"/>
         </div>
         <div class="user-profile__tweets-wrapper">
             <TweetItem
-                    v-for="tweet in user.tweets"
+                    v-for="tweet in state.user.tweets"
                     :key="tweet.id"
-                    :username="user.username"
+                    :username="state.user.username"
                     :tweet="tweet"
             />
         </div>
@@ -24,14 +24,15 @@
 </template>
 
 <script>
+    import {reactive} from 'vue';
     import TweetItem from "./TweetItem";
     import CreateTweetPanel from "./CreateTweetPanel";
 
     export default {
         name: "UserProfile",
         components: {CreateTweetPanel, TweetItem},
-        data() {
-            return {
+        setup() {
+            const state = reactive({
                 followers: 0,
                 user: {
                     id: 1,
@@ -45,11 +46,16 @@
                         {id: 2, content: "Don't forget to subscribe to @JohnSmith1358"},
                     ]
                 }
+            });
+
+            function addTweet(tweet) {
+                state.user.tweets.unshift({id: state.user.tweets.length + 1, content: tweet});
             }
-        },
-        methods: {
-            addTweet(tweet) {
-                this.user.tweets.unshift({id: this.user.tweets.length + 1, content: tweet });
+
+
+            return {
+                state,
+                addTweet
             }
         }
     };
