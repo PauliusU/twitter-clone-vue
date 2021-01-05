@@ -57,7 +57,8 @@
         .navigation__logo {
             font-weight: bold;
             font-size: 24px;
-            /*display: flex;*/
+            display: flex;
+            align-items: center;
 
             &:hover {
                 color: deeppink;
@@ -69,8 +70,9 @@
 
             .navigation__logo--icon {
                 fill: white;
-                width: 23px;
-                height: 21px;
+                width: 24px;
+                height: 24px;
+                padding-right: 5px;
             }
         }
 

@@ -22,7 +22,7 @@
             <TweetItem
                     v-if="state.user.tweets.length === 0"
                     :username="state.user.username + ' has no tweets'"
-                    tweet='{}'
+                    :tweet='{}'
             />
         </div>
     </div>
